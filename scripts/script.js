@@ -1,73 +1,68 @@
-console.log("Let's Play Rock-Paper-Scissors!");
+const choices = document.querySelectorAll("button");
+const choicesContainer = document.querySelector(".container");
+const results = document.querySelector(".results");
+const scores = document.querySelector(".scores");
+let humanScore = (computerScore = roundNumber = 0);
 
-function playGame() {
-  let humanScore = (computerScore = roundNumber = 0);
-  function playRound() {
-    function getComputerChoice() {
-      // Get random int between 0 to 2
-      choice = Math.floor(Math.random() * 3);
+function playRound(humanChoice) {
+  function getComputerChoice() {
+    // Get random int between 0 to 2
+    choice = Math.floor(Math.random() * 3);
 
-      switch (choice) {
-        case 0:
-          return "Rock";
-        case 1:
-          return "Paper";
-        case 2:
-          return "Scissors";
-      }
-      return 1;
+    switch (choice) {
+      case 0:
+        return "Rock";
+      case 1:
+        return "Paper";
+      case 2:
+        return "Scissors";
     }
-
-    function getHumanChoice() {
-      let humanChoice;
-
-      do {
-        humanChoice = prompt("Choose Rock, Paper, or Scissors: ").toLowerCase();
-      } while (!["rock", "paper", "scissors"].includes(humanChoice));
-
-      return humanChoice[0].toUpperCase() + humanChoice.slice(1);
-    }
-
-    roundNumber++;
-    console.log(`Round ${roundNumber}`);
-    computerChoice = getComputerChoice();
-    humanChoice = getHumanChoice();
-
-    //   Rock-Paper-Scissors Logic:
-    //   If choices are same:
-    //      draw
-    //   Else:
-    //      longer choice wins
-    //   If choices are scissor and rock:
-    //      reverse resulti
-
-    if (humanChoice === computerChoice) {
-      console.log("Draw!");
-    } else if (
-      (humanChoice.length > computerChoice.length &&
-        !(humanChoice === "Scissors" && computerChoice === "Rock")) ||
-      (computerChoice === "Scissors" && humanChoice === "Rock")
-    ) {
-      console.log(`You win! ${humanChoice} beats ${computerChoice}`);
-      humanScore++;
-    } else {
-      console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
-      computerScore++;
-    }
-    console.log(`Your Score: ${humanScore}, CPU's Score: ${computerScore}`);
+    return 1;
   }
 
-  for (let i = 0; i < 5; i++) {
-    playRound();
+  if (!["Rock", "Paper", "Scissors"].includes(humanChoice)) {
+    console.log("Invalid Choice, Please Try Again.");
+    return 1;
   }
 
-  if (humanScore === computerScore) {
-    console.log("Game Over: It's a Draw!");
-  } else if (humanScore > computerScore) {
-    console.log("Game Over: You Win! Good job!");
+  roundNumber++;
+  computerChoice = getComputerChoice();
+
+  //   Rock-Paper-Scissors Logic:
+  //   If choices are same:
+  //      draw
+  //   Else:
+  //      longer choice wins
+  //   If choices are scissor and rock:
+  //      reverse resulti
+
+  if (humanChoice === computerChoice) {
+    results.textContent = "Draw!";
+  } else if (
+    (humanChoice.length > computerChoice.length &&
+      !(humanChoice === "Scissors" && computerChoice === "Rock")) ||
+    (computerChoice === "Scissors" && humanChoice === "Rock")
+  ) {
+    humanScore++;
+    results.textContent = `You win! ${humanChoice} beats ${computerChoice}`;
   } else {
-    console.log("Game Over: You Lose! Try again?");
+    computerScore++;
+    results.textContent = `You lose! ${computerChoice} beats ${humanChoice}`;
+  }
+  scores.textContent = `P1 Score: ${humanScore} CPU Score: ${computerScore}`;
+
+  if (humanScore >= 5 || computerScore >= 5) {
+    if (humanScore > computerScore) {
+      results.textContent = "Game Over: You Win! Good job!";
+    } else {
+      results.textContent = "Game Over: You Lose! Try again?";
+    }
+    choices.forEach((choice) => {
+      choicesContainer.removeChild(choice);
+    });
   }
 }
 
-playGame();
+choices.forEach((choice) => {
+  choice.addEventListener("click", (e) => playRound(e.target.id));
+});
