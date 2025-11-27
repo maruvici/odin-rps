@@ -1,6 +1,7 @@
 # odin-rock-paper-scissors
+
 Repository made for The Odin Project - Foundations. A basic
-in-console rock-paper-scissors game.
+rock-paper-scissors web game.
 
 Skills-in-practice:
 
